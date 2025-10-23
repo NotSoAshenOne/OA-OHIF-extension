@@ -79,6 +79,18 @@ module.exports = (env, argv) => {
         // Hoisted Yarn Workspace Modules
         path.resolve(__dirname, '../../../node_modules'),
         SRC_DIR,
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/export-mode/export/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/export-mode/export/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export/node_modules'
+        ),
       ],
     },
     plugins: [
