@@ -9,6 +9,7 @@ import { initToolGroups, toolbarButtons, cornerstone,
   modeInstance as basicModeInstance,
  } from '@ohif/mode-basic';
 
+
 export const tracked = {
   measurements: '@ohif/extension-measurement-tracking.panelModule.trackedMeasurements',
   thumbnailList: '@ohif/extension-measurement-tracking.panelModule.seriesList',
@@ -19,6 +20,7 @@ export const extensionDependencies = {
   // Can derive the versions at least process.env.from npm_package_version
   ...basicDependencies,
   '@ohif/extension-measurement-tracking': '^3.0.0',
+  'export-extension': '^0.0.1'
 };
 
 export const exportInstance = {
@@ -50,6 +52,24 @@ export const exportRoute =
       layoutInstance: exportInstance,
     };
 
+// export function onModeEnter({
+//   servicesManager,
+// }: withAppTypes) {
+//   const { toolbarService } = servicesManager.services;
+
+//       toolbarService.register('export-extension.toolbarModule');
+//       toolbarService.updateSection('primary', 
+//         ['export-extension.toolbarModule.ExportViewport']);
+
+// }
+
+// export function onModeExit({
+//   servicesManager,
+// }: withAppTypes) {
+//   const { toolbarService } = servicesManager.services;
+//   toolbarService.reset();
+// }
+
 export const modeInstance = {
     ...basicModeInstance,
     // TODO: We're using this as a route segment
@@ -61,6 +81,10 @@ export const modeInstance = {
       exportRoute
     ],
     extensions: extensionDependencies,
+    toolbarSections: {
+      'primary': ['ExportViewport']
+    }
+
   };
 
 const mode = {

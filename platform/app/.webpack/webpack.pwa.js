@@ -91,6 +91,26 @@ module.exports = (env, argv) => {
           __dirname,
           '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export/node_modules'
         ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export-extension/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export-extension/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export-extension/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export-extension/node_modules'
+        ),
+        path.resolve(
+          __dirname,
+          '/Users/morgan/Documents/Coding/OA-OHIF/OA-OHIF-extension/export-mode/export-extension/node_modules'
+        ),
       ],
     },
     plugins: [
