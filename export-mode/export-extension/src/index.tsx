@@ -7,8 +7,6 @@ import DownloadIcon from '../../Download';
 
 import JSZIP from 'jszip';
 
-// import exportViewport from './ZipDownloadButton';
-
 /**
  * You can remove any of the following modules if you don't need them.
  */
@@ -55,8 +53,7 @@ export default {
         uiType: 'ohif.toolButton',
         props: {
           icon: 'DownloadIcon',
-          label: i18n.t('Buttons:Export'),
-          tooltip: i18n.t('Buttons: Export Image'),
+          label: i18n.t('Buttons:Export Data'),
           commands: 'exportViewport'
         }
       }
@@ -107,19 +104,13 @@ export default {
 
             const study = DicomMetadataStore.getStudy(studyInstanceUID)
 
-            console.log('Study:', study);
-            console.log('study instance:', study.series[0].instances[0]);
-            console.log('Display Sets:', displaySets);
-
             const patientName = study.series[0].instances[0].PatientName.toString();
             const studyDate = study.series[0].instances[0].StudyDate;
 
             const studyData = {PatientName: patientName, StudyDate: studyDate};
-            console.log('Study Data:', studyData);
             
             const activeViewport = viewportGridService.getActiveViewportId();
             
-            // Code from the cornerstone download form extension to get viewport image
             const divForDownloadViewport = document.querySelector(
               `div[data-viewport-uid="${activeViewport}"]`
             );
