@@ -45,7 +45,7 @@ export default {
         id: 'ExportViewport',
         uiType: 'ohif.toolButton',
         props: {
-          icon: 'download',
+          icon: 'tool-capture',
           label: i18n.t('Buttons:Export'),
           tooltip: i18n.t('Buttons: Export Image'),
           commands: 'exportViewport'

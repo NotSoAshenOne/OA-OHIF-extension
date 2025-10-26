@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n, { on } from 'i18next';
 import { id } from './id';
 import { initToolGroups, toolbarButtons, cornerstone,
   ohif,
@@ -8,7 +8,7 @@ import { initToolGroups, toolbarButtons, cornerstone,
   mode as basicMode,
   modeInstance as basicModeInstance,
  } from '@ohif/mode-basic';
-
+import exportExtension from '../../../export-mode/export-extension/src/index';
 
 export const tracked = {
   measurements: '@ohif/extension-measurement-tracking.panelModule.trackedMeasurements',
@@ -52,16 +52,18 @@ export const exportRoute =
       layoutInstance: exportInstance,
     };
 
-// export function onModeEnter({
-//   servicesManager,
-// }: withAppTypes) {
-//   const { toolbarService } = servicesManager.services;
+export function onModeEnter({
+  servicesManager,
+  commandsManager,
+  extensionManager,
+}) {
+  const { toolbarService } = servicesManager.services;
 
-//       toolbarService.register('export-extension.toolbarModule');
-//       toolbarService.updateSection('primary', 
-//         ['export-extension.toolbarModule.ExportViewport']);
+  toolbarService.register(exportExtension.getToolbarModule({ servicesManager, commandsManager, extensionManager }));
+  toolbarService.updateSection('primary', 
+    ['ExportViewport'],);
 
-// }
+}
 
 // export function onModeExit({
 //   servicesManager,
@@ -81,9 +83,10 @@ export const modeInstance = {
       exportRoute
     ],
     extensions: extensionDependencies,
-    toolbarSections: {
-      'primary': ['ExportViewport']
-    }
+    // toolbarSections: {
+    //   'primary': ['ExportViewport']
+    // }
+    onModeEnter,
 
   };
 
