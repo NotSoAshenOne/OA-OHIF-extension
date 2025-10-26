@@ -2,6 +2,8 @@ import { id } from './id';
 import i18n from 'i18next';
 import html2canvas from 'html2canvas';
 import { DicomMetadataStore, utils, viewports } from '@ohif/core';
+import { Icons } from '@ohif/ui-next';
+import DownloadIcon from '../../Download';
 
 import JSZIP from 'jszip';
 
@@ -23,7 +25,9 @@ export default {
    * (e.g. cornerstone, cornerstoneTools, ...) or registering any services that
    * this extension is providing.
    */
-  preRegistration: ({ servicesManager, commandsManager, configuration = {} }) => {},
+  preRegistration: ({ servicesManager, commandsManager, configuration = {} }) => {
+    Icons.addIcon("DownloadIcon", DownloadIcon);
+  },
   /**
    * PanelModule should provide a list of panels that will be available in OHIF
    * for Modes to consume and render. Each panel is defined by a {name,
@@ -50,7 +54,7 @@ export default {
         id: 'ExportViewport',
         uiType: 'ohif.toolButton',
         props: {
-          icon: 'tool-capture',
+          icon: 'DownloadIcon',
           label: i18n.t('Buttons:Export'),
           tooltip: i18n.t('Buttons: Export Image'),
           commands: 'exportViewport'
