@@ -53,6 +53,8 @@ export const exportRoute =
       layoutInstance: exportInstance,
     };
 
+//* On Mode Enter
+//*  Registers Toolbar Buttons and Updates Toolbar Sections
 export function onModeEnter({
   servicesManager,
   commandsManager,

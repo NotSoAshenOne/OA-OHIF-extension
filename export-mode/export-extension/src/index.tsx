@@ -1,7 +1,7 @@
 import { id } from './id';
 import i18n from 'i18next';
 import html2canvas from 'html2canvas';
-import { DicomMetadataStore, utils, viewports } from '@ohif/core';
+import { DicomMetadataStore } from '@ohif/core';
 import { Icons } from '@ohif/ui-next';
 import DownloadIcon from '../../Download';
 
@@ -26,20 +26,7 @@ export default {
   preRegistration: ({ servicesManager, commandsManager, configuration = {} }) => {
     Icons.addIcon("DownloadIcon", DownloadIcon);
   },
-  /**
-   * PanelModule should provide a list of panels that will be available in OHIF
-   * for Modes to consume and render. Each panel is defined by a {name,
-   * iconName, iconLabel, label, component} object. Example of a panel module
-   * is the StudyBrowserPanel that is provided by the default extension in OHIF.
-   */
-  getPanelModule: ({ servicesManager, commandsManager, extensionManager }) => {},
-  /**
-   * ViewportModule should provide a list of viewports that will be available in OHIF
-   * for Modes to consume and use in the viewports. Each viewport is defined by
-   * {name, component} object. Example of a viewport module is the CornerstoneViewport
-   * that is provided by the Cornerstone extension in OHIF.
-   */
-  getViewportModule: ({ servicesManager, commandsManager, extensionManager }) => {},
+
   /**
    * ToolbarModule should provide a list of tool buttons that will be available in OHIF
    * for Modes to consume and use in the toolbar. Each tool button is defined by
@@ -49,6 +36,7 @@ export default {
   getToolbarModule: ({ servicesManager, commandsManager, extensionManager }) => {
     return [
       {
+        // Button for the Export Viewport command
         id: 'ExportViewport',
         uiType: 'ohif.toolButton',
         props: {
@@ -59,30 +47,9 @@ export default {
       }
     ]
   },
-  /**
-   * LayoutTemplateMOdule should provide a list of layout templates that will be
-   * available in OHIF for Modes to consume and use to layout the viewer.
-   * Each layout template is defined by a { name, id, component}. Examples include
-   * the default layout template provided by the default extension which renders
-   * a Header, left and right sidebars, and a viewport section in the middle
-   * of the viewer.
-   */
-  getLayoutTemplateModule: ({ servicesManager, commandsManager, extensionManager }) => {},
-  /**
-   * SopClassHandlerModule should provide a list of sop class handlers that will be
-   * available in OHIF for Modes to consume and use to create displaySets from Series.
-   * Each sop class handler is defined by a { name, sopClassUids, getDisplaySetsFromSeries}.
-   * Examples include the default sop class handler provided by the default extension
-   */
-  getSopClassHandlerModule: ({ servicesManager, commandsManager, extensionManager }) => {},
-  /**
-   * HangingProtocolModule should provide a list of hanging protocols that will be
-   * available in OHIF for Modes to use to decide on the structure of the viewports
-   * and also the series that hung in the viewports. Each hanging protocol is defined by
-   * { name, protocols}. Examples include the default hanging protocol provided by
-   * the default extension that shows 2x2 viewports.
-   */
-  getHangingProtocolModule: ({ servicesManager, commandsManager, extensionManager }) => {},
+
+
+
   /**
    * CommandsModule should provide a list of commands that will be available in OHIF
    * for Modes to consume and use in the viewports. Each command is defined by
@@ -93,12 +60,14 @@ export default {
   getCommandsModule: ({ servicesManager, commandsManager, extensionManager }) => {
     return {
       definitions: {
+        // Gets the current active viewport and exports it as a zip file containing an image and metadata
         exportViewport: {
           commandFn: async () => {
             console.log('Exporting the viewport');
             
             const { viewportGridService, displaySetService } = servicesManager.services;
-          
+            
+            // Gets the metadata for the active study
             const displaySets = displaySetService.getActiveDisplaySets();
             const studyInstanceUID = displaySets[0]?.StudyInstanceUID;
 
@@ -109,6 +78,8 @@ export default {
 
             const studyData = {PatientName: patientName, StudyDate: studyDate};
             
+            // Gets the active viewport element to export
+            // Follows logic similar to Screenshot tool
             const activeViewport = viewportGridService.getActiveViewportId();
             
             const divForDownloadViewport = document.querySelector(
@@ -123,6 +94,7 @@ export default {
             const canvas = await html2canvas(divForDownloadViewport as HTMLElement);
             const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 1.0));
 
+            // Create a zip file containing the image and metadata
             const zip = new JSZIP();
             zip.file('image.jpg', imageBlob);
             zip.file('metadata.json', JSON.stringify(studyData, null, 2));
@@ -141,17 +113,4 @@ export default {
       defaultContext: ['ACTIVE_VIEWPORT::CORNERSTONE'],
     }
   },
-  /**
-   * ContextModule should provide a list of context that will be available in OHIF
-   * and will be provided to the Modes. A context is a state that is shared OHIF.
-   * Context is defined by an object of { name, context, provider }. Examples include
-   * the measurementTracking context provided by the measurementTracking extension.
-   */
-  getContextModule: ({ servicesManager, commandsManager, extensionManager }) => {},
-  /**
-   * DataSourceModule should provide a list of data sources to be used in OHIF.
-   * DataSources can be used to map the external data formats to the OHIF's
-   * native format. DataSources are defined by an object of { name, type, createDataSource }.
-   */
-  getDataSourcesModule: ({ servicesManager, commandsManager, extensionManager }) => {},
 };
