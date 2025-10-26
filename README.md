@@ -42,7 +42,7 @@ Additionally, as the challenge requested for a mode specifically for the export 
 <br>
 <br>
 
-## Orignal project README.md
+## Orignal source code README.md
 
 <!-- prettier-ignore-start -->
 <div align="center">
