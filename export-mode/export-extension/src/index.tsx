@@ -1,5 +1,10 @@
 import { id } from './id';
 import i18n from 'i18next';
+import html2canvas from 'html2canvas';
+import { DicomMetadataStore, utils, viewports } from '@ohif/core';
+
+import JSZIP from 'jszip';
+
 // import exportViewport from './ZipDownloadButton';
 
 /**
@@ -88,8 +93,52 @@ export default {
     return {
       definitions: {
         exportViewport: {
-          commandFn: () => {
+          commandFn: async () => {
             console.log('Exporting the viewport');
+            
+            const { viewportGridService, displaySetService } = servicesManager.services;
+          
+            const displaySets = displaySetService.getActiveDisplaySets();
+            const studyInstanceUID = displaySets[0]?.StudyInstanceUID;
+
+            const study = DicomMetadataStore.getStudy(studyInstanceUID)
+
+            console.log('Study:', study);
+            console.log('study instance:', study.series[0].instances[0]);
+            console.log('Display Sets:', displaySets);
+
+            const patientName = study.series[0].instances[0].PatientName.toString();
+            const studyDate = study.series[0].instances[0].StudyDate;
+
+            const studyData = {PatientName: patientName, StudyDate: studyDate};
+            console.log('Study Data:', studyData);
+            
+            const activeViewport = viewportGridService.getActiveViewportId();
+            
+            // Code from the cornerstone download form extension to get viewport image
+            const divForDownloadViewport = document.querySelector(
+              `div[data-viewport-uid="${activeViewport}"]`
+            );
+
+            if (!divForDownloadViewport) {
+              console.debug('No viewport found for download');
+              return;
+            }
+
+            const canvas = await html2canvas(divForDownloadViewport as HTMLElement);
+            const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 1.0));
+
+            const zip = new JSZIP();
+            zip.file('image.jpg', imageBlob);
+            zip.file('metadata.json', JSON.stringify(studyData, null, 2));
+            
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+            const link = document.createElement('a');
+            link.download = `report.zip`;
+            link.href = URL.createObjectURL(zipBlob);
+            link.click();
+
           }, 
           storeContexts: []
         },

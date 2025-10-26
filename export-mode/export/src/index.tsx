@@ -10,6 +10,11 @@ import { initToolGroups, toolbarButtons, cornerstone,
  } from '@ohif/mode-basic';
 import exportExtension from '../../../export-mode/export-extension/src/index';
 
+import { usePatientInfo } from '@ohif/extension-default';
+import { DicomMetadataStore } from '@ohif/core';
+import { utils } from '@ohif/core';
+
+
 export const tracked = {
   measurements: '@ohif/extension-measurement-tracking.panelModule.trackedMeasurements',
   thumbnailList: '@ohif/extension-measurement-tracking.panelModule.seriesList',
@@ -58,11 +63,28 @@ export function onModeEnter({
   extensionManager,
 }) {
   const { toolbarService } = servicesManager.services;
+//   const { viewportGridService, displaySetService } = servicesManager.services;
+
+// // Get the active viewport
+//   const activeViewport = viewportGridService.getActiveViewport();
+
+//   // Get its displaySets
+//   const displaySets = displaySetService.getDisplaySetsForViewport(activeViewport.viewportId);
+//   const studyInstanceUID = displaySets[0]?.StudyInstanceUID;
+  
+//   DicomMetadataStore.getStudyMetadata(studyInstanceUID).then(study => {
+//     const patientName = utils.getPatientName(study.patientName);
+//     const studyDate = study.studyDate;
+//   });
 
   toolbarService.register(exportExtension.getToolbarModule({ servicesManager, commandsManager, extensionManager }));
   toolbarService.updateSection('primary', 
     ['ExportViewport'],);
+  
 
+
+
+  
 }
 
 // export function onModeExit({
